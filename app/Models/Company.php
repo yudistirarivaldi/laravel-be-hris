@@ -15,8 +15,6 @@ class Company extends Model
         'logo',
     ];
 
-    // add relation
-
     public function users() {
         return $this->belongsToMany(User::class);
     }
