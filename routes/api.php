@@ -16,9 +16,28 @@ use App\Http\Controllers\API\UserController;
 |
 */
 
-Route::get('/company', [CompanyController::class, 'all']);
+// Company API With Prefix
+Route::prefix('company')->middleware('auth:sanctum')->name('company.')->group(function () {
 
-Route::post('login', [UserController::class, 'login']);
-Route::post('register', [UserController::class, 'register']);
-Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
-Route::get('user', [UserController::class, 'fetch'])->middleware('auth:sanctum');
+    Route::get('', [CompanyController::class, 'fetch'])->name('fetch');
+    Route::post('', [CompanyController::class, 'create'])->name('create');
+    Route::post('update/{id}', [CompanyController::class, 'update'])->name('update');
+    // jadi put tidak bisa handle form data & gambar jadi harus di ubah ke post
+});
+
+Route::name('auth.')->group(function () {
+
+    Route::post('login', [UserController::class, 'login'])->name('login');
+    Route::post('register', [UserController::class, 'register'])->name('register');
+
+    Route::middleware('auth:sanctum')->group(function() {
+        Route::post('logout', [UserController::class, 'logout'])->name('logout');
+        Route::get('user', [UserController::class, 'fetch'])->name('fetch');
+    });
+
+
+});
+
+
+
+
