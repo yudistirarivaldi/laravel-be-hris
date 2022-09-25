@@ -21,9 +21,9 @@ class CompanyController extends Controller
 
         if ($id) {
             // ngambil data company yang di buat attau berdasarkan id user yang login saat ini
-            $company = Company::whereHas('users', function ($query) {
+            $company = Company::with(['users'])->whereHas('users', function ($query) {
                 $query->where('user_id', Auth::id());
-            })->with(['users'])->find($id);
+                    })->with(['users'])->find($id);
 
             if($company) {
                 return ResponseFormatter::success($company, 'Company Found');
