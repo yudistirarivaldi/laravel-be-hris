@@ -21,6 +21,7 @@ class CompanyController extends Controller
 
         if ($id) {
             // ngambil data company yang di buat attau berdasarkan id user yang login saat ini
+            // get list by user yang sedang login
             $company = Company::with(['users'])->whereHas('users', function ($query) {
                 $query->where('user_id', Auth::id());
                     })->with(['users'])->find($id);
@@ -33,6 +34,7 @@ class CompanyController extends Controller
         }
 
         // ngambil data company yang di buat attau berdasarkan id user yang login saat ini
+        // get list by user yang sedang login
         $companies = Company::with(['users'])->whereHas('users', function ($query) {
             $query->where('user_id', Auth::id());
         });
@@ -98,7 +100,7 @@ class CompanyController extends Controller
             // Update company
             $company->update([
                 'name' => $request->name,
-                'logo' => $path
+                'logo' => isset($path) ? $path : $company->logo,
             ]);
 
             return ResponseFormatter::success($company, 'Company updated');
